@@ -1,5 +1,5 @@
 package episunsa;
-import episunsa.Persona;
+import episunsa.Personahs;
 import episunsa.PMF;
 
 import java.io.IOException;
@@ -27,52 +27,52 @@ public class Comprobar extends HttpServlet {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html;charset=UTF-8");
+		final Query q = pm.newQuery(Personahs.class);
 	try{
-		String user="";
-		String clave="";
+		String username="";
+		String password="";
 		
-		if (request.getParameter("user")!=null)
-			user=request.getParameter("user");
+		if (request.getParameter("username")!=null)
+			username=request.getParameter("username");
 		
-		if(request.getParameter("clave")!=null )
-			clave=request.getParameter("clave");
+		if(request.getParameter("password")!=null )
+			password=request.getParameter("password");
 		
-		if((user.equals("fundador") && clave.equals("fundador")) || (user.equals("representante") && clave.equals("representate")))
-		{
-			response.sendRedirect("index-admin.jsp");
+		if((username.equals("admin") && password.equals("12345678"))){
+			List<Personahs> personas = (List<Personahs>) q.execute(username);
+			request.setAttribute("personas", personas);
+			RequestDispatcher view= request.getRequestDispatcher("/WEB-INF/index-admin.jsp");
+			view.forward(request, response);
 		}
 		
 		
-			Query qclave = pm.newQuery(Persona.class);
-			qclave.setFilter("clave == claveParam");
-			qclave.declareParameters("String claveParam");
+			Query qpassword = pm.newQuery(Personahs.class);
+			qpassword.setFilter("password == passwordParam");
+			qpassword.declareParameters("String passwordParam");
 			
-		
-			
-
 		try{
-			List<Persona> personas = (List<Persona>) qclave.execute(clave);
+			List<Personahs> personas = (List<Personahs>) qpassword.execute(password);
 		
 		
 	    	
 	    	  if(personas.size()!=0){
 	             HttpSession sesion = request.getSession(true);
-	             request.setAttribute("user",user); 
-	             sesion.setAttribute("user", user);
-	             response.sendRedirect("index-user.jsp");
-				 
+	             request.setAttribute("username",username); 
+	             sesion.setAttribute("username", username);
+	             RequestDispatcher view= request.getRequestDispatcher("/WEB-INF/index-user.jsp");
+	             view.forward(request, response);
 				
 	    	  }
 	    	  else {
-	    		  response.sendRedirect("login.jsp");
+	    		  RequestDispatcher view= request.getRequestDispatcher("/login.jsp");
 	    	  }			
 		}
 		finally{
-			 qclave.closeAll();
+			 qpassword.closeAll();
 		}		
 	}
 	finally{ out.close();}
 	}
 }
 		
-	
+
