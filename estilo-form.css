@@ -1,7 +1,7 @@
 @CHARSET "ISO-8859-1";
 
 body {
-	background-color:#1E2E4A;
+	background-color:#CFC9CB;
 	padding-left: 11em;
 	font: 15px 'trebuchet MS', 'lucida sans';
 	color: white;
@@ -26,7 +26,7 @@ legend {
 	color: white;
 }
 div#formulario {
-	background-color: #737C8C;
+	background-color: #261E2F;
 	padding: 10px;
 	clear: left;
 	float: left;
